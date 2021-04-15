@@ -87,7 +87,13 @@
       viewSubscriptions() {
         router.push('/subscription-list');
       },
-
+      Payment() {
+        router.push('/payment');
+      },
+       Register() {
+        router.push('/register');
+      },
+      
       getUser() {
         if (localStorage.getItem("isAuthenticates")
           && JSON.parse(localStorage.getItem("isAuthenticates")) === true) {
@@ -96,5 +102,6 @@
       }
     }
   }
+  
   
 </script>

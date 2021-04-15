@@ -1,33 +1,87 @@
+<template>
+  <div>
+    <div v-if="!paidFor">
+      <h1>One Time Payment! - ${{ product.price }}</h1>
+
+      <p>{{ product.description }}</p>
+      <img src="../assets/images/SubAlert.png">
+    </div>
+
+    <div v-if="paidFor">
+      <h1>You have successfully purched your life-time use of SubAlert Application!</h1>
+    </div>
+
+    <div ref="paypal"></div>
+  </div>
+</template>
+
 <script>
-  const PayPalButton = paypal.Buttons.driver("vue", window.Vue);
-  Vue.component("app", {
-    template: `
-      <paypal-buttons [props]="{
-          createOrder: createOrder,
-          onApprove: onApprove
-      }"></paypal-buttons>
-    `,
-    components: {
-      "paypal-buttons": PayPalButton,
-    },
-    computed: {
-      createOrder: function (data, actions) {
-        return actions.order.create({
-          purchase_units: [
-            {
-              amount: {
-                value: "0.01",
-              },
-            },
-          ],
-        });
-      },
-      onAuthorize: function (data, actions) {
-        return actions.order.capture();
-      },
-    },
-  });
-  var vm = new Vue({
-    el: "#container",
-  });
+export default {
+  name: "Payment",
+  data: function() {
+    return {
+      loaded: false,
+      paidFor: false,
+      product: {
+        price: .99,
+      }
+    };
+  },
+  mounted: function() {
+    const script = document.createElement("script");
+    script.src =
+      "https://www.paypal.com/sdk/js?client-id=Ae96A1SN06uFhpkhihBzvNos8HNSaqU41AIPUrKvGHz8uLWccud1IhpADdxDzmo4sBbziv6Mypx1YvMv";
+    script.addEventListener("load", this.setLoaded);
+    document.body.appendChild(script);
+  },
+  methods: {
+    setLoaded: function() {
+      this.loaded = true;
+      window.paypal
+        .Buttons({
+          createOrder: (data, actions) => {
+            return actions.order.create({
+              purchase_units: [
+                {
+                  description: this.product.description,
+                  amount: {
+                    currency_code: "USD",
+                    value: this.product.price
+                  }
+                }
+              ]
+            });
+          },
+          onApprove: async (data, actions) => {
+            const order = await actions.order.capture();
+            this.data;
+            this.paidFor = true;
+            console.log(order);
+          },
+          onError: err => {
+            console.log(err);
+          }
+        })
+        .render(this.$refs.paypal);
+    }
+  }
+};
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+h3 {
+  margin: 40px 0 0;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
+</style>

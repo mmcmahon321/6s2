@@ -65,6 +65,7 @@
         { title: 'Home', url:"/"},
         { title: 'Subscription', url:"/subscription-list" },
         { title: 'Payment', url:"/payment" },
+        { title: 'Register', url:"/register" }
       ]
     }),
     mounted() {

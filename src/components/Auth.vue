@@ -56,6 +56,9 @@
 
               </v-container>
               <v-btn class="info" :disabled="!valid" @click="login">Login</v-btn>
+              <p class="forgot-password text-right">
+                  <router-link to ="ForgotPassword">Forgot Password?</router-link>
+              </p>
             </v-form>
           </v-card-text>
         </v-card>
