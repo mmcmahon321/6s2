@@ -100,7 +100,7 @@
                     Confirm_Password: this.Confirm_Password
                 };
                
-               axios.post('https://localhost:8080/register', data)
+               axios.post('https://nostalgic-lovelace-dc74e1.netlify.app/register/register', data)
                 .then(
                     res => {
                         console.log(res)
